@@ -1,17 +1,22 @@
-// text_on_cube.scad - Example for text() usage in OpenSCAD
 
-echo(version=version());
+// No license, but send me a hello if you use this for some good purpose.
+// -- Mirek Kratochvil <exa.exa@gmail.com>
 
-//font = "URW Bookman L";
-font = "Monospace";
+//TODO: round corners?
+
+font = "Monospace"; //URW Bookman L looks nicely here as well
 font2 = "Droid Sans Mono";
-//TODO: kulaty rohy
 
+//inch-sized tiles look imperial.
 tilesize=25.4;
+//you might like them a bit larger if you want to use this in nature.
 
+//distance between tiles
 off=tilesize*1.05;
+//height 1/8"
 tileheight=tilesize/8;
 
+//this produces one tile
 module tilec(letter, x, y, c) {
   translate([x*off,(6-y)*off,0]) {
     difference() {
@@ -37,7 +42,6 @@ module tilec(letter, x, y, c) {
 }
 
 //tiles
-
 module tile(letter,x,y) {
    tilec(letter,x,y,"darkgray");
 }
@@ -91,7 +95,6 @@ tile("!",3,6);
 tile("'",4,6);
 tile("(",5,6);
 tile(")",6,6);
-
 
 //the token
 translate([-off/2,off/2,0]) {
