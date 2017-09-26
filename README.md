@@ -1,15 +1,18 @@
 
 # LS47 hand-computable cipher
 
-This is a slight improvement of the ElsieFour cipher as described by Alan Kaminsky [1]. We use 7x7 characters instead of previous (barely fitting) 6x6 to be able to encrypt some structured information and add a simple key-expansion algorithm. Similar security considerations hold.
+This is a slight improvement of the ElsieFour cipher as described by Alan
+Kaminsky [1]. We use 7x7 characters instead of original (barely fitting) 6x6,
+to be able to encrypt some structured information. We also describe a simple
+key-expansion algorithm, because remembering passwords is popular. Similar
+security considerations as with ElsieFour hold.
 
-There's 3D-printable SCAD model of the whole thing.
+There's also a 3D-printable SCAD model of the whole thing. Yay!
 
 ### Character board
 
-We have added some real punctuation, basic stuff for writing a bit of markdown,
-and quotes&parens for writing structured information. The letters of the board
-now look like this:
+We have added some real punctuation, basic stuff for writing expressions,
+punctuation and quotes. The letters of the board now look like this:
 
 ```
 _ a b c d e f
@@ -21,26 +24,29 @@ u v w x y z .
 / : ? ! ' ( )
 ```
 
-Zoomed in, it's nice to have extra position information written on the tiles:
+Zoomed in, it's very practical to have extra position information written on
+the tiles:
 
 ```
-/-----\  /-----\  /-----\  /-----\  /-----\  
-|     |  |     |  |     |  |     |  |     |  
+/-----\  /-----\  /-----\  /-----\  /-----\
+|     |  |     |  |     |  |     |  |     |
 | _  0|  | a  1|  | b  2|  | c  3|  | d  4|  ...
-|   0 |  |   0 |  |   0 |  |   0 |  |   0 |  
-\-----/  \-----/  \-----/  \-----/  \-----/  
+|   0 |  |   0 |  |   0 |  |   0 |  |   0 |
+\-----/  \-----/  \-----/  \-----/  \-----/
 
-/-----\  /-----\  
-|     |  |     |  
+/-----\  /-----\
+|     |  |     |
 | g  0|  | h  1|  ...
-|   1 |  |   1 |  
-\-----/  \-----/  
+|   1 |  |   1 |
+\-----/  \-----/
    .        .
    .        .
    .        .
 ```
 
-You also need some kind of a marker (e.g. a small shiny stone, bolt nut or similar kinds of well-shaped trash).
+To run (hand-run) the encryption/decryption, you will also need some kind of a
+marker (e.g. a small shiny stone, bolt nut or similar kind of well-shaped
+trash).
 
 ## How-To
 
@@ -57,6 +63,58 @@ You may as well see the paper [1], there are also pictures. This is somewhat mor
 7. Rotate the column that now (after the first rotation) contains the ciphertext letter one position down, carry the marker if present.
 8. Update the position of the marker: `M := M + C' mod (7,7)` where `C'` are the numbers written on the ciphertext tile.
 9. Repeat from 3 as many times as needed to encrypt the whole plaintext.
+
+#### Encryption example with ascii images!
+
+```
+1,2. Symmetric key with         3,4. we want to encrypt 'y'.
+     marker put on 'e'               Look at the marker:
+
+  [e]f _ a b c d                     /-----\
+   l m g h i j k                     |     |
+   ( ) / : ? ! '                     | e  5|
+   s t n o p q r                     |   0 |
+   z . u v w x y                     \-----/
+   5 6 0 1 2 3 4
+   + * 7 8 9 , -
+
+5. Ciphertext is 'w'            6. Rotate the plaintext 1 position
+   (='y' moved by (5,0))           right, possibly carrying the marker.
+
+                               [e]f _ a b c d        [e]f _ a b c d
+   Output 'w'!                  l m g h i j k         l m g h i j k
+                                ( ) / : ? ! '         ( ) / : ? ! '
+                                s t n o p q r         s t n o p q r
+                                  z . u v w x y  >>   y z . u v w x
+                                5 6 0 1 2 3 4         5 6 0 1 2 3 4
+                                + * 7 8 9 , -         + * 7 8 9 , -
+
+
+7. Rotate the ciphertext 1         Now look at the ciphertext tile.
+   position down, also carry.
+
+   [e]f _ a b , d                       /-----\
+    l m g h i c k                       |     |
+    ( ) / : ? j '                       | w  2|
+    s t n o p ! r                       |   3 |
+    y z . u v q x                       \-----/
+    5 6 0 1 2 w 4
+    + * 7 8 9 3 -
+
+8. Update the marker position         9. GOTO 3.
+   by ciphertext offset (2,3).
+
+
+    e f _ a i c d
+    l m g h ? j k
+    ( ) / : p ! '
+    s t[n]o v q r
+    y z . u 2 w x
+    5 6 0 1 9 3 4
+    + * 7 8 b , -
+
+
+```
 
 ### Decryption
 
@@ -99,13 +157,13 @@ The actual expansion can be as simple as this:
 
 ### Undistinguishable ciphertexts
 
-To get a different ciphertext even if the same plaintext is encrypted; prepend
-it with a nonce. A nonce is a completely random sequence of letters of a
-pre-negotiated length (at least 10 tiles drawn randomly from a bag is
-adviseable).
+To get a different ciphertext even if the same plaintext is encrypted
+repeatedly; prepend it with a nonce. A nonce is a completely random sequence of
+letters of a pre-negotiated length (e.g. N tiles drawn randomly from a bag,
+adviseable value of N is at least 10).
 
 You may also want to add a random number of spaces to the end of the ciphertext
--- it prevents the enemy from seeing the difference between ciphertexts for
+-- it prevents the enemy from seeing the difference between ciphertexts of
 'yes please' and 'no', which would otherwise encrypt to easily measurable
 gibberish like `qwc3w_cs'(` and `+v`.
 
@@ -113,13 +171,15 @@ gibberish like `qwc3w_cs'(` and `+v`.
 
 Because ciphertext may be altered in the transfer or during the error-prone
 human processing, it is advised to append a simple "signature" to the end of
-the message; e.g. a simple string `__YourHonorableNameHere`. If the signature
-doesn't match expectations (which happens with overwhelming probability if
-there was any error in the process), you discard the message and ask the sender
-to re-transmit.
+the message; which may look as simple as `__YourHonorableNameHere`. If the
+signature doesn't match expectations (which happens with overwhelming
+probability if there was any error in the process), either try again to see if
+you didn't make a mistake, or discard the message and ask the sender to
+re-transmit.
 
 This works because the cipher output is message-dependent: Having a wrong bit
-somewhere in the middle causes avalanche effect and breaks the signature.
+somewhere in the middle causes avalanche effect and erases any meaning from the
+text after several characters.
 
 ## References
 
