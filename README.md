@@ -67,8 +67,8 @@ You may as well see the paper [1], there are also pictures. This is somewhat mor
 #### Encryption example with ascii images!
 
 ```
-1,2. Symmetric key with         3,4. we want to encrypt 'y'.
-     marker put on 'e'               Look at the marker:
+1,2. Symmetric key with         3,4. We want to encrypt 'y'.
+     marker put on 'e'               Look at the marked tile:
 
   [e]f _ a b c d                     /-----\
    l m g h i j k                     |     |
@@ -90,7 +90,7 @@ You may as well see the paper [1], there are also pictures. This is somewhat mor
                                 + * 7 8 9 , -         + * 7 8 9 , -
 
 
-7. Rotate the ciphertext 1         Now look at the ciphertext tile.
+7. Rotate the ciphertext 1         Now look at the ciphertext tile:
    position down, also carry.
 
    [e]f _ a b , d                       /-----\
@@ -105,13 +105,13 @@ You may as well see the paper [1], there are also pictures. This is somewhat mor
    by ciphertext offset (2,3).
 
 
-    e f _ a i c d
-    l m g h ? j k
-    ( ) / : p ! '
-    s t[n]o v q r
-    y z . u 2 w x
-    5 6 0 1 9 3 4
-    + * 7 8 b , -
+    e f _ a b , d
+    l m g h i c k
+    ( ) / : ? j '
+    s t[n]o p ! r
+    y z . u v q x
+    5 6 0 1 2 w 4
+    + * 7 8 9 3 -
 
 
 ```
