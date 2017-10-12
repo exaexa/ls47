@@ -9,6 +9,12 @@ security considerations as with ElsieFour hold.
 
 There's also a 3D-printable SCAD model of the whole thing. Yay!
 
+![Tiles printed out](tiles.jpg)
+
+We suggest printing the model using more than one filament color to make the
+letters easily recognizable. Thanks go to Martin Ptasek for providing the
+picture.
+
 ### Character board
 
 We have added some real punctuation, basic stuff for writing expressions,
