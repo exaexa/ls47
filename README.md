@@ -15,6 +15,8 @@ We suggest printing the model using more than one filament color to make the
 letters easily recognizable. Thanks go to Martin Ptasek for providing the
 picture.
 
+If you trust your computer, there is now a python implementation in `ls47.py`.
+
 ### Character board
 
 We have added some real punctuation, basic stuff for writing expressions,
