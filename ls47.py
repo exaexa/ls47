@@ -1,10 +1,15 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
+#
+# This software is hereby released into public domain. Use it wisely.
+#
+# Originally written by Mirek Kratochvil (2017)
+# Python3 port by Bernhard Esslinger (Feb 2018)
 
 import random
 
 letters = "_abcdefghijklmnopqrstuvwxyz.0123456789,-+*/:?!'()"
-tiles = zip(letters, map(lambda x: (x / 7, x % 7), range(7 * 7)))
+tiles = list(zip(letters, map(lambda x: (x // 7, x % 7), range(7 * 7))))
 padding_size = 10
 
 
@@ -23,7 +28,7 @@ def check_key(key):
 
 
 def find_ix(letter):
-    m = filter(lambda (l, pos): l == letter, tiles)
+    m = [l for l in tiles if l[0] == letter]
     if len(m) != 1:
         raise ValueError('Letter ' + letter + ' not in LS47!')
     for (l, pos) in m:
@@ -33,20 +38,20 @@ def find_ix(letter):
 def find_pos(key, letter):
     p = key.find(letter)
     if p >= 0 and p < 7 * 7:
-        return (p / 7, p % 7)
+        return (p // 7, p % 7)
     raise ValueError('Letter ' + letter + ' not in key?!')
 
 
-def add_pos((ax, ay), (bx, by)):
-    return ((ax + bx) % 7, (ay + by) % 7)
+def add_pos(a, b):
+    return ((a[0] + b[0]) % 7, (a[1] + b[1]) % 7)
 
 
-def sub_pos((ax, ay), (bx, by)):
-    return ((ax - bx) % 7, (ay - by) % 7)
+def sub_pos(a, b):
+    return ((a[0] - b[0]) % 7, (a[1] - b[1]) % 7)
 
 
-def find_at_pos(key, (row, col)):
-    return key[col + row * 7]
+def find_at_pos(key, coord):
+    return key[coord[1] + coord[0] * 7]
 
 
 def rotate_right(key, row, n):
@@ -56,28 +61,27 @@ def rotate_right(key, row, n):
 
 
 def rotate_down(key, col, n):
-    lines = map(lambda i: key[i * 7:(i + 1) * 7], range(7))
-    lefts = map(lambda l: l[:col], lines)
-    mids = map(lambda l: l[col], lines)
-    rights = map(lambda l: l[col + 1:], lines)
+    lines  = [key[i * 7:(i + 1) * 7] for i in range(7)]
+    lefts  = [l[:col] for l in lines]
+    mids   = [l[col] for l in lines]
+    rights = [l[col + 1:] for l in lines]
     n = (7 - n % 7) % 7
     mids = mids[n:] + mids[:n]
-    return reduce(lambda a, b: a + b, map(lambda i: lefts[i] + mids[i] \
-                  + rights[i], range(7)))
+    return ''.join(lefts[i] + mids[i] + rights[i] for i in range(7))
 
 
-def rotate_marker_right((mrow, mcol), row, n):
-    if mrow != row:
-        return (mrow, mcol)
+def rotate_marker_right(m, row, n):
+    if m[0] != row:
+        return (m[0], m[1])
     else:
-        return (mrow, (mcol + n) % 7)
+        return (m[0], (m[1] + n) % 7)
 
 
-def rotate_marker_down((mrow, mcol), col, n):
-    if mcol != col:
-        return (mrow, mcol)
+def rotate_marker_down(m, col, n):
+    if m[1] != col:
+        return (m[0], m[1])
     else:
-        return ((mrow + n) % 7, mcol)
+        return ((m[0] + n) % 7, m[1])
 
 
 def derive_key(password):
@@ -150,10 +154,15 @@ if __name__ == '__main__':
 
     # a bit of test!
 
+    print('letters in this implementation (line by line):')
+    print(letters)
+    # print('tiles positions: ' + str(tiles))
+
     key = derive_key('s3cret_p4ssw0rd/31337')
-    print 'key:', key
+    print('test key: ' + key)
     enc = encrypt_pad(key, 'conflagrate_the_rose_bush_at_six!',
                       'peace-vector-3')
-    print 'encrypted:', enc
+
+    print('encrypted test: ' + enc)
     dec = decrypt_pad(key, enc)
-    print 'decrypted:', dec
+    print('decrypted test: ' + dec)
