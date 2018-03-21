@@ -4,17 +4,25 @@
 
 //TODO: round corners?
 
-font = "Monospace"; //URW Bookman L looks nicely here as well
+font = "Consolas"; //URW Bookman L looks nicely here as well
 font2 = "Droid Sans Mono";
+
+alphabet = "en";
 
 //inch-sized tiles look imperial.
 tilesize=25.4;
-//you might like them a bit larger if you want to use this in nature.
+//you might like them a bit larger if you want to use this outdoors
 
 //distance between tiles
-off=tilesize*1.05;
+off=tilesize*1.1;
 //height 1/8"
 tileheight=tilesize/8;
+fontheight=tileheight*0.5;
+
+//accomodate for Ё
+if (alphabet=="ru") { 
+        fontheight=fontheight*0.9;
+}
 
 //this produces one tile
 module tilec(letter, x, y, c) {
@@ -25,7 +33,7 @@ module tilec(letter, x, y, c) {
       color(c)
         translate([tilesize*.4,tilesize*.4,tileheight*.51])
         linear_extrude (height=tileheight/2)
-          text(letter, font=font, size=tilesize*.5,
+          text(letter, font=font, size=tilesize*.45,
                halign="center", valign="baseline");
       color(c)
       translate([tilesize*.83, tilesize/2, tileheight*.76])
@@ -46,55 +54,36 @@ module tile(letter,x,y) {
    tilec(letter,x,y,"darkgray");
 }
 
-tile("_",0,0);
-tile("A",1,0);
-tile("B",2,0);
-tile("C",3,0);
-tile("D",4,0);
-tile("E",5,0);
-tile("F",6,0);
-tile("G",0,1);
-tile("H",1,1);
-tile("I",2,1);
-tile("J",3,1);
-tile("K",4,1);
-tile("L",5,1);
-tile("M",6,1);
-tile("N",0,2);
-tile("O",1,2);
-tile("P",2,2);
-tile("Q",3,2);
-tile("R",4,2);
-tile("S",5,2);
-tile("T",6,2);
-tile("U",0,3);
-tile("V",1,3);
-tile("W",2,3);
-tile("X",3,3);
-tile("Y",4,3);
-tile("Z",5,3);
-tile(".",6,3);
-tile("0",0,4);
-tile("1",1,4);
-tile("2",2,4);
-tile("3",3,4);
-tile("4",4,4);
-tile("5",5,4);
-tile("6",6,4);
-tile("7",0,5);
-tile("8",1,5);
-tile("9",2,5);
-tile(",",3,5);
-tile("-",4,5);
-tile("+",5,5);
-tile("*",6,5);
-tile("/",0,6);
-tile(":",1,6);
-tile("?",2,6);
-tile("!",3,6);
-tile("'",4,6);
-tile("(",5,6);
-tile(")",6,6);
+module tiles(letters) {
+    for(i=[0,1,2,3,4,5,6]) for (j=[0,1,2,3,4,5,6]) {
+        tile(letters[i+7*j], i, j);
+    }
+}
+
+if (alphabet=="en") {
+    // latin variant of tiles
+    tiles(
+        ["_", "A", "B", "C", "D", "E", "F",
+        "G", "H", "I", "J", "K", "L", "M",
+        "N", "O", "P", "Q", "R", "S", "T",
+        "U", "V", "W", "X", "Y", "Z", ".",
+        "0", "1", "2", "3", "4", "5", "6",
+        "7", "8", "9", ",", "-", "+", "*",
+        "/", ":", "?", "!", "'", "(", ")"]
+    );
+} else if (alphabet=="ru") {
+    // variant of tiles thanks to Stas Bushuev
+    // (see https://github.com/Xitsa/ls47 for other versions)
+    tiles(
+        ["_", "А", "Б", "В", "Г", "Д", "Е",
+        "Ё", "Ж", "З", "И", "Й", "К", "Л",
+        "М", "Н", "О", "П", "Р", "С", "Т",
+        "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ",
+        "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "/",
+        "0", "1", "2", "3", "4", "5", "6",
+        "7", "8", "9", ".", ",", "?", "!"]
+    );
+}
 
 //the token
 translate([-off/2,off/2,0]) {
@@ -104,3 +93,5 @@ translate([-off/2,off/2,0]) {
         cylinder(h=tileheight*1.2, d=tilesize*.7-tileheight);
     }
 }
+
+
