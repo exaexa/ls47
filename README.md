@@ -70,8 +70,8 @@ You may as well see the paper [1], there are also pictures. This is somewhat mor
 3. Find the next letter you want to encrypt on the board, its position is `P`.
 4. Look at the marker; numbers written on the marked tile are coordinates `M`.
 5. Compute position of the ciphertext as `C := P + M mod (7,7)`. Output the letter found on position `C` as ciphertext.
-6. Rotate the row that contains the plaintext letter one position to the right, carry the marker if present.
-7. Rotate the column that now (after the first rotation) contains the ciphertext letter one position down, carry the marker if present.
+6. Rotate the row that contains the plaintext letter one position to the right, but do not carry the marker if present (it should stay on the same coordinates).
+7. Rotate the column that now (after the first rotation) contains the ciphertext letter one position down, also not carrying the marker.
 8. Update the position of the marker: `M := M + C' mod (7,7)` where `C'` are the numbers written on the ciphertext tile.
 9. Repeat from 3 as many times as needed to encrypt the whole plaintext.
 
@@ -90,7 +90,7 @@ You may as well see the paper [1], there are also pictures. This is somewhat mor
    + * 7 8 9 , -
 
 5. Ciphertext is 'w'            6. Rotate the plaintext 1 position
-   (='y' moved by (5,0))           right, possibly carrying the marker.
+   (='y' moved by (5,0))           right, keep marker coordinates.
 
                                [e]f _ a b c d        [e]f _ a b c d
    Output 'w'!                  l m g h i j k         l m g h i j k
@@ -102,7 +102,7 @@ You may as well see the paper [1], there are also pictures. This is somewhat mor
 
 
 7. Rotate the ciphertext 1         Now look at the ciphertext tile:
-   position down, also carry.
+   position down.
 
    [e]f _ a b , d                       /-----\
     l m g h i c k                       |     |
@@ -174,9 +174,9 @@ letters of a pre-negotiated length (e.g. N tiles drawn randomly from a bag,
 adviseable value of N is at least 10).
 
 You may also want to add a random number of spaces to the end of the ciphertext
--- it prevents the enemy from seeing the difference between ciphertexts of
-'yes please' and 'no', which would otherwise encrypt to easily measurable
-gibberish like `qwc3w_cs'(` and `+v`.
+-- it prevents the enemy from seeing the difference between ciphertexts of 'yes
+please' and 'no', which would otherwise encrypt to gibberish that is easily
+distinguishable by length, like `qwc3w_cs'(` and `+v`.
 
 ### Authenticated encryption
 
