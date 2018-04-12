@@ -106,10 +106,8 @@ def encrypt(key, plaintext):
         ciphertext += c
 
         key = rotate_right(key, pp[0], 1)
-        mp = rotate_marker_right(mp, pp[0], 1)
         cp = find_pos(key, c)
         key = rotate_down(key, cp[1], 1)
-        mp = rotate_marker_down(mp, cp[1], 1)
         mp = add_pos(mp, find_ix(c))
     return ciphertext
 
@@ -126,10 +124,8 @@ def decrypt(key, ciphertext):
         plaintext += p
 
         key = rotate_right(key, pp[0], 1)
-        mp = rotate_marker_right(mp, pp[0], 1)
         cp = find_pos(key, c)
         key = rotate_down(key, cp[1], 1)
-        mp = rotate_marker_down(mp, cp[1], 1)
         mp = add_pos(mp, find_ix(c))
     return plaintext
 

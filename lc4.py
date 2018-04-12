@@ -150,10 +150,10 @@ def encrypt(plaintext):
         ciphertext += c
 
         key = rotate_right(key, pp[0], 1)
-        mp = rotate_marker_right(mp, pp[0], 1)
+        if marker_mode==1: mp = rotate_marker_right(mp, pp[0], 1)
         cp = find_pos(key, c)
         key = rotate_down(key, cp[1], 1)
-        mp = rotate_marker_down(mp, cp[1], 1)
+        if marker_mode==1: mp = rotate_marker_down(mp, cp[1], 1)
         mp = add_pos(mp, find_ix(c))
     return ciphertext
 
@@ -170,10 +170,10 @@ def decrypt(ciphertext):
         plaintext += p
 
         key = rotate_right(key, pp[0], 1)
-        mp = rotate_marker_right(mp, pp[0], 1)
+        if marker_mode==1: mp = rotate_marker_right(mp, pp[0], 1)
         cp = find_pos(key, c)
         key = rotate_down(key, cp[1], 1)
-        mp = rotate_marker_down(mp, cp[1], 1)
+        if marker_mode==1: mp = rotate_marker_down(mp, cp[1], 1)
         mp = add_pos(mp, find_ix(c))
     return plaintext
 
@@ -221,6 +221,7 @@ def printinfo(enc=False):
     eprint('NONCE     : ' + nonce)
     eprint('NONCE ENC : ' + nonce_enc)
     eprint('NONCEMODE : ' + ("Kaminsky" if nonce_mode==1 else "Kratochvil"))
+    eprint('MARKER    : ' + ("Kaminsky" if marker_mode==1 else "Kratochvil"))
     if enc:
         eprint('PLAINTEXT : ' + plaintext)
         eprint('CIPHERTEXT: ' + ciphertext)
@@ -230,19 +231,21 @@ def printinfo(enc=False):
 
 
 def test1(size):
-    global letters, nonce_mode, tiles, noncelen, nonce, nonce_size, nonce_enc, signature
+    global letters, nonce_mode, marker_mode, tiles, noncelen, nonce, nonce_size, nonce_enc, signature
     global ciphertext, plaintext, key, initialkey, mp
 
     if size == 7:
         CIPHERNAME = "LS47"
         letters = letters7;
         nonce_mode = 2
+        marker_mode = 2
         noncelen=10; nonce = create_random_nonce(noncelen)
         # nonce = 'dr0+:_pij2'  # just a sample for testing fixed nonce
     else:
         CIPHERNAME = "LC4"
         letters = letters6;
         nonce_mode = 1
+        marker_mode = 1
         noncelen=6; nonce = create_random_nonce(noncelen)
         # nonce = 'pjpm5i'  # just a sample for testing fixed nonce
 
@@ -288,24 +291,35 @@ if __name__ == '__main__':
 
     mgroup = parser.add_mutually_exclusive_group()
     parser.add_argument("-v", "--verbose", help="output additional information on stderr", action="count", default=0)
+
     mgroup.add_argument("-6", "--lc4", help="use ElsieFour cipher (6x6 table) (default)", action="store_true")
     mgroup.add_argument("-7", "--ls47", help="use LS47 cipher (7x7 table)", action="store_true")
+
     mgroup2 = parser.add_mutually_exclusive_group()
     mgroup2.add_argument("-ks", "--keystring", metavar="STRING", help="use STRING as key")
     mgroup2.add_argument("-kf", "--keyfile", metavar="FILE", help="read key from FILE")
     mgroup2.add_argument("-ws", "--keywordstring", metavar="STRING", help="generate key from keyword STRING", default=None)
     mgroup2.add_argument("-wf", "--keywordfile", metavar="FILE", help="read keyword from FILE to generate key", default=None)
+
     mgroup3 = parser.add_mutually_exclusive_group()
     mgroup3.add_argument("-nl", "--noncelen", metavar="LENGTH", help="use random nonce of length LENGTH", type=int, default=0)
     mgroup3.add_argument("-ns", "--noncestring", metavar="STRING", help="use STRING as nonce")
-    parser.add_argument("-n0", "--nKaminsky", help="use nonce in Kaminsky mode (default for LC4)", action="store_true")
-    parser.add_argument("-n1", "--nKratochvil", help="use nonce in Kratochvil mode (default for LS47)", action="store_true")
+
     mgroup4 = parser.add_mutually_exclusive_group()
     mgroup4.add_argument("-es", "--encryptstring", metavar="STRING", help="encrypt STRING")
     mgroup4.add_argument("-ef", "--encryptfile", metavar="FILE", help="read plaintext from FILE and encrypt it")
     mgroup4.add_argument("-ds", "--decryptstring", metavar="STRING", help="decrypt STRING")
     mgroup4.add_argument("-df", "--decryptfile", metavar="FILE", help="read ciphertext from FILE and decrypt it")
     mgroup4.add_argument("-t", "--test", help="encrypt and decrypt a string with a random nonce and a given key (once with LC4 and once with LS47)", action="store_true")
+
+    mgroup5 = parser.add_mutually_exclusive_group()
+    mgroup5.add_argument("-n0", "--nKaminsky", help="use nonce in Kaminsky mode (default for LC4)", action="store_true")
+    mgroup5.add_argument("-n1", "--nKratochvil", help="use nonce in Kratochvil mode (default for LS47)", action="store_true")
+
+    mgroup6 = parser.add_mutually_exclusive_group()
+    mgroup6.add_argument("-m0", "--mKaminsky", help="use marker in Kaminsky mode (default for LC4)", action="store_true")
+    mgroup6.add_argument("-m1", "--mKratochvil", help="use marker in Kratochvil mode (default for LS47)", action="store_true")
+
     parser.add_argument("-s", "--signature", help="append SIGNATURE to plaintext when encrypting")
 
     args = parser.parse_args()
@@ -347,6 +361,12 @@ if __name__ == '__main__':
     nonce_mode = 1 if size==6 else 2
     if args.nKaminsky: nonce_mode = 1
     if args.nKratochvil: nonce_mode = 2
+
+    # set marker mode
+
+    marker_mode = 1 if size==6 else 2
+    if args.nKaminsky: marker_mode = 1
+    if args.nKratochvil: marker_mode = 2
 
     # set key
 
