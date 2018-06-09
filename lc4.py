@@ -365,8 +365,8 @@ if __name__ == '__main__':
     # set marker mode
 
     marker_mode = 1 if size==6 else 2
-    if args.nKaminsky: marker_mode = 1
-    if args.nKratochvil: marker_mode = 2
+    if args.mKaminsky: marker_mode = 1
+    if args.mKratochvil: marker_mode = 2
 
     # set key
 
