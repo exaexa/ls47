@@ -3,13 +3,13 @@
 # This software is hereby released into public domain. Use it wisely.
 #
 # ElsieFour (LC4) and its enhancement LS47
-# version 2.8: 2018-05-30
+# version 2.8.1 (2018-07-24)
 #
 # Original paper by Alan Kaminsky: https://eprint.iacr.org/2017/339.pdf
 # Original LC4 Java source: https://www.cs.rit.edu/~ark/parallelcrypto/elsiefour/
 #
 # - Python 2 script for LS47 originally written by Mirek Kratochvil (2017)
-#   See https://github.com/exaexa/ls47
+#   See https://gitea.blesmrt.net/exa/ls47
 # - Python 3 port by Bernhard Esslinger / AK (Feb 2018)
 #   See www.mysterytwisterc3.org
 # - New options by CrypTool project (www.cryptool.org) (Feb 2018) in order to
@@ -17,31 +17,31 @@
 #   deal with nonces and keywords, to support reading from file and commandline,
 #   and to extend test outputs (v2.7).
 # - v2.8 extended the testcase and added the fix of the fixpoint-ish problem for ls47 (option -m1):
-#   python lc4-ls47.py -6 -ws thisismysecretkey -es ############## -ns igxf5e -m1
+#   python lc4.py -6 -ws thisismysecretkey -es ############## -ns igxf5e -m1
 #   igxf5egcyhoo#ny#o5i5
-#   python lc4-ls47.py -6 -ws thisismysecretkey -es ############## -ns igxf5e -m0
+#   python lc4.py -6 -ws thisismysecretkey -es ############## -ns igxf5e -m0
 #   igxf5e##############
 #
 # Sample calls:
 #
-# Using cipher LC4, enforced with option -6:
+# 1) Using cipher LC4, enforced with option -6:
 # // encrypt (key, message). Following example returns tk5j23tq94_gw9c#lhzs
-# python lc4-ls47.py -6 -ks s2ferw_nx346ty5odiupq#lmz8ajhgcvk79b  -es aaaaaaaaaaaaaaaaaaaa
+# python lc4.py -6 -ks s2ferw_nx346ty5odiupq#lmz8ajhgcvk79b  -es aaaaaaaaaaaaaaaaaaaa
 # // decrypt (key, message). Following example returns aaaaaaaaaaaaaaaaaaaa
-# python lc4-ls47.py -6 -ks s2ferw_nx346ty5odiupq#lmz8ajhgcvk79b  -ds tk5j23tq94_gw9c#lhzs
-# python lc4-ls47.py -6 -ws thisismysecretkey -es its_my_fathers_son_but_not_my_brother
-# python lc4-ls47.py -6 -ws thisismysecretkey -ds 6dudfy3u7omoxy4jbscgn37c2se_d8gx6ogk9
-# python lc4-ls47.py -6 -ws thisismysecretkey -es its_my_fathers_son_but_not_my_brother -v -nl 6
-# python lc4-ls47.py -6 -ws thisismysecretkey -ds q6xojffkncfyz#f5czs49#3mbsco#2iscvbnm#bymaf -v -nl 6
+# python lc4.py -6 -ks s2ferw_nx346ty5odiupq#lmz8ajhgcvk79b  -ds tk5j23tq94_gw9c#lhzs
+# python lc4.py -6 -ws thisismysecretkey -es its_my_fathers_son_but_not_my_brother
+# python lc4.py -6 -ws thisismysecretkey -ds 6dudfy3u7omoxy4jbscgn37c2se_d8gx6ogk9
+# python lc4.py -6 -ws thisismysecretkey -es its_my_fathers_son_but_not_my_brother -v -nl 6
+# python lc4.py -6 -ws thisismysecretkey -ds q6xojffkncfyz#f5czs49#3mbsco#2iscvbnm#bymaf -v -nl 6
 #
-# Using cipher LS47, enforced with option -7:
-# python lc4-ls47.py -7 -ws s3cret_p4ssw0rd/31337 -es conflagrate_the_rose_bush_at_six!---peace-vector-3  -v -ns 8y(l._4ct'  -m0
-# python lc4-ls47.py -7 -ws s3cret_p4ssw0rd/31337 -ds y'zbvvs+d2,ky4sy?w(_wkz*7'90v:./s)kcz?mj+gyu8-'h(y,i+v,z+1ws -v -nl 10  -m0
-# python lc4-ls47.py -7 -ws s3cret_p4ssw0rd/31337 -ds y'zbvvs+d2,ky4sy?w(_wkz*7'90v:./s)kcz?mj+gyu8-'h(y,i+v,z+1ws -v -ns 8y(l._4ct'  -m0
+# 2) Using cipher LS47, enforced with option -7:
+# python lc4.py -7 -ws s3cret_p4ssw0rd/31337 -es conflagrate_the_rose_bush_at_six!---peace-vector-3  -v -ns 8y(l._4ct'  -m0
+# python lc4.py -7 -ws s3cret_p4ssw0rd/31337 -ds y'zbvvs+d2,ky4sy?w(_wkz*7'90v:./s)kcz?mj+gyu8-'h(y,i+v,z+1ws -v -nl 10  -m0
+# python lc4.py -7 -ws s3cret_p4ssw0rd/31337 -ds y'zbvvs+d2,ky4sy?w(_wkz*7'90v:./s)kcz?mj+gyu8-'h(y,i+v,z+1ws -v -ns 8y(l._4ct'  -m0
 #
-# Using the automatic test (option -t can be combined with options -s and -ws)
-# python lc4-ls47.py -t
-# python lc4-ls47.py -t  -ws s3cret_p4sswxyz  -s peacevector_34
+# 3) Using the automatic test (option -t can be combined with options -s and -ws)
+# python lc4.py -t
+# python lc4.py -t  -ws s3cret_p4sswxyz  -s peacevector_34
 
 
 from __future__ import print_function
@@ -51,8 +51,9 @@ import random
 import argparse
 
 
-version = "v2.8 (2018-05-30)"
+version = "v2.8.1 (2018-07-24)"
 
+# define alphabet
 letters6 = "#_23456789abcdefghijklmnopqrstuvwxyz"
 letters7 = "_abcdefghijklmnopqrstuvwxyz.0123456789,-+*/:?!'()"
 
@@ -343,7 +344,7 @@ if __name__ == '__main__':
     mgroup4.add_argument("-ef", "--encryptfile", metavar="FILE", help="read plaintext from FILE and encrypt it")
     mgroup4.add_argument("-ds", "--decryptstring", metavar="STRING", help="decrypt STRING")
     mgroup4.add_argument("-df", "--decryptfile", metavar="FILE", help="read ciphertext from FILE and decrypt it")
-    mgroup4.add_argument("-t", "--test", help="encrypt and decrypt a string with a given key (four cases: random and fixed nonce, LC4 and LS47)", action="store_true")
+    mgroup4.add_argument("-t", "--test", help="encrypt and decrypt a string with a given key (with LC4, the given key equals the alphabet). Four cases tested: random/fixed nonce, each with LC4 and LS47", action="store_true")
 
     mgroup3 = parser.add_mutually_exclusive_group()
     mgroup3.add_argument("-nl", "--noncelen", metavar="LENGTH", help="use random nonce of length LENGTH (default: no nonce)", type=int, default=0)
@@ -410,7 +411,7 @@ if __name__ == '__main__':
 
     key = letters
 
-    # help variables for verbose printing via printinfo()
+    # helper variables for verbose printing via printinfo()
 
     szkeyword = '' # global variable which can be changed in test1() [so it can be used as test condition in printinfo() instead of args.keywordstring and instead of test1() manipulating args.keywordstring]
     szsignature = '' # global variable which can be changed in test1() [so it can be used as test condition in printinfo() instead of args.keywordstring and instead of test1() manipulating args.keywordstring].  # Allows to use -s besides -t
