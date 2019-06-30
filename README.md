@@ -15,10 +15,14 @@ We suggest printing the model using more than one filament color to make the
 letters easily recognizable. Thanks go to Martin Ptasek for providing the
 picture.
 
-If you trust your computer, there is now a very simple python implementation in
-`ls47.py`. A much better version usuable as an actual binary (also supporting
-several versions of padding and the original ElsieFour cipher) was supplied by
-Bernhard Esslinger from the CrypTool project, available in `lc4.py`.
+If you trust your computer, there are several LS47 implementations around:
+
+- A very simple python implementation in available here in `ls47.py`.
+- A much better version usuable as an actual binary (also supporting several
+  versions of padding and the original ElsieFour cipher) was supplied by
+  Bernhard Esslinger from the CrypTool project, available in `lc4.py`.
+- Javascript version (npm-compatible) of the cipher implementations was created
+  by Ulysse McConnell, available at https://github.com/umcconnell/lc4
 
 ### Character board
 
