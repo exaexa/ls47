@@ -151,9 +151,11 @@ def rotate_marker_down(m, col, n):
         return ((m[0] + n) % size, m[1])
 
 
-def derive_key(password):
+def derive_key(password, one_indexed):
     i = 0
     k = letters
+    # if using one-indexed arrays, moves the zero element to the end
+    if one_indexed: k = k[1:]+k[0]
     for c in password:
         (row, col) = find_ix(c)
         k = rotate_down(rotate_right(k, i, col), i, row)
@@ -295,7 +297,7 @@ def test1(size, fixednonce):
         else:
             keyword = 's3cret_p4ssw0rd/31337'
         szkeyword = keyword # This statement needed to show keyword in printinfo() [don't change args.keywordstring within test1()!]
-        key = derive_key(keyword)
+        key = derive_key(keyword, false)
     else:
         key = letters
     initialkey = key
@@ -433,7 +435,7 @@ if __name__ == '__main__':
     if args.keywordfile: args.keywordstring = open(args.keywordfile, 'r').read().rstrip('\r\n')
     if args.keywordstring:
         szkeyword = args.keywordstring
-        key = derive_key(args.keywordstring)
+        key = derive_key(args.keywordstring, args.playingcard)
 
     if args.keyfile: args.keystring = open(args.keyfile, 'r').read().rstrip('\r\n')
     if args.keystring: key = args.keystring;

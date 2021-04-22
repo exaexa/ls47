@@ -206,16 +206,17 @@ cards could be more innocuous and easily explainable to the secret police than
 a set of peculiar numbered tiles.
 
 ```
-0 a b c d e f
-g h i j k l m
-n o p q r s t
-u v w x y z _
-. , - + * / :
-? ! ' ( ) 1 2
-3 4 5 6 7 8 9
+a b c d e f g
+h i j k l m n
+o p q r s t u
+v w x y z _ .
+, - + * / : ?
+! ' ( ) 1 2 3
+4 5 6 7 8 9 0
 ```
 
-With this layout, the following mapping to playing cards is used:
+**This board uses a 1-based index**, so `a=1`, `b=2`, and so on. With this layout, 
+the following mapping to playing cards is used:
 
 | **Character** | Card | Index | **Character** | Card | Index | **Character** | Card | Index | **Character** | Card | Index  |
 |-----------|------|-------|-----------|------|-------|-----------|------|-------|-----------|------|--------|
@@ -242,12 +243,12 @@ Heart is left as an exercise for the reader.
 For LC4, the following board could be used:
 
 ```
-# a b c d e
-f g h i j k
-l m n o p q
-r s t u v w
-x y z _ 2 3
-4 5 6 7 8 9
+a b c d e f
+g h i j k l
+m n o p q r
+s t u v w x
+y z _ 2 3 4
+5 6 7 8 9 #
 ```
 
 The "Hearts" suit would be ommitted from the card mapping table, and the index
