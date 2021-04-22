@@ -66,46 +66,43 @@ trash).
 #### Alternative playing-card-compatible board
 
 The following board can be used so that characters and offsets can be easily 
-mapped to playing cards, similar to the Solitaire cipher [2]. This could be
-more innocuous and easily explainable to the secret police than a set of 
-peculiar numbered tiles. 
+mapped to playing cards, similar to the Solitaire cipher [2]. Using playing 
+cards could be more innocuous and easily explainable to the secret police than 
+a set of peculiar numbered tiles. 
 
 
 ```
 0 a b c d e f
 g h i j k l m
 n o p q r s t
-u v w x y z .
-, - + * / : ?
-! ' ( ) _ 1 2
+u v w x y z _
+. , - + * / : 
+? ! ' ( ) 1 2
 3 4 5 6 7 8 9
 ```
 
 With this layout, the following mapping to playing cards is used:
 
-| Character | Card | Index | Character | Card | Index | Character | Card | Index | Character | Card | Index |
-|-----------|------|-------|-----------|------|-------|-----------|------|-------|-----------|------|-------|
-| a         | A♦   | 1     | n         | A♣   | 14    | .         | A♥   | 27    | 1         | A♠   | 40    |
-| b         | 2♦   | 2     | o         | 2♣   | 15    | ,         | 2♥   | 28    | 2         | 2♠   | 41    |
-| c         | 3♦   | 3     | p         | 3♣   | 16    | -         | 3♥   | 29    | 3         | 3♠   | 42    |
-| ...       |      |       | ...       |      |       | ...       |      |       | ...       |      |       |
-| j         | 10♦   | 10    | w         | 10♣   | 23    | '         | 10♥   | 39    | 7         | 7♠   | 46    |
-| k         | J♦   | 11    | x         | j♣   | 24    | (         | j♥   | 39    | 8         | 8♠   | 47    |
-| l         | Q♦   | 12    | y         | Q♣   | 25    | )         | Q♥   | 39    | 9         | 9♠   | 48    |
-| m         | K♦   | 13    | z         | K♣   | 26    | _         | K♥   | 39    | 0         | 10♠   | 49 (0)    |
+| **Character** | Card | Index | **Character** | Card | Index | **Character** | Card | Index | **Character** | Card | Index  |
+|-----------|------|-------|-----------|------|-------|-----------|------|-------|-----------|------|--------|
+| a         | A♦   | 1     | n         | A♣   | 14    | _         | A♥   | 27    | 1         | A♠   | 40     |
+| b         | 2♦   | 2     | o         | 2♣   | 15    | .         | 2♥   | 28    | 2         | 2♠   | 41     |
+| c         | 3♦   | 3     | p         | 3♣   | 16    | ,         | 3♥   | 29    | 3         | 3♠   | 42     |
+| ...       | ...  | ...   | ...       | ...  | ...   | ...       | ...  | ...   | ...       | ...  | ...    |
+| j         | 10♦  | 10    | w         | 10♣  | 23    | !         | 10♥  | 39    | 7         | 7♠   | 46     |
+| k         | J♦   | 11    | x         | J♣   | 24    | '         | J♥   | 39    | 8         | 8♠   | 47     |
+| l         | Q♦   | 12    | y         | Q♣   | 25    | (         | Q♥   | 39    | 9         | 9♠   | 48     |
+| m         | K♦   | 13    | z         | K♣   | 26    | )         | K♥   | 39    | 0         | 10♠  | 49 (0) |
 
-The (x, y) offset is calculated from the index with the usual modular 
-arithmetic: `x = index % 7` and `y = index / 7`.
+The (x, y) offset can be calculated by first determining the index: take the 
+number of the suit (0-3), multiply by 13, and add the card number (using 1 for 
+the Ace, 11-13 for face cards). Then, determine the offset from the index 
+using the usual modular arithmetic: `x = index % 7` and `y = index / 7`.
 
-Note that the offset can be easily calculated from a given card: take the 
-order of the suit (0-3), multiply by 13, and add the card number (11-13 for 
-face cards, 1 for the Ace) to get the index. The offset can then be calculated 
-from the index. 
-
-Alphanumeric characters can be easily mapped to cards as well, with letters
-mapping to Diamonds or Clubs, and numbers mapping to Spades (and optionally
-a Joker). All of the special characters are mapped to the Hearts, though
-coming up with a mnemonic for the mapping of each special character to each
+Alphanumeric characters can be easily mapped to cards, with letters mapping to 
+Diamonds or Clubs and numbers mapping to Spades (note that Spades face cards 
+are ommitted). All of the special characters are mapped to the Hearts, though 
+coming up with a mnemonic for the mapping of each special character to each 
 Heart is left as an exercise for the reader.
 
 For LC4, the following board could be used:
@@ -119,8 +116,9 @@ x y z _ 2 3
 4 5 6 7 8 9
 ```
 
-The "Hearts" suit would be ommitted from the card mappin table. `#` and `_`
-would map to the Joker/10♠ and A♠, respectively.
+The "Hearts" suit would be ommitted from the card mapping table, and the index 
+of each of the Spades would be decreased by 13 to compensate. `#` and `_` 
+would map to 10♠ and A♠, respectively.
 
 ## How-To
 
@@ -257,5 +255,5 @@ text after several characters.
 
 ## References
 
-[1] *Kaminsky, Alan. "ElsieFour: A Low-Tech Authenticated Encryption Algorithm For Human-to-Human Communication." IACR Cryptology ePrint Archive 2017 (2017): 339.*
-[2] *Schneier, Bruce. ["The Solitaire Encryption Algorith"](https://www.schneier.com/academic/solitaire/).
+[1] *Kaminsky, Alan. "ElsieFour: A Low-Tech Authenticated Encryption Algorithm For Human-to-Human Communication." IACR Cryptology ePrint Archive 2017 (2017): 339.*  
+[2] *Schneier, Bruce. ["The Solitaire Encryption Algorithm"](https://www.schneier.com/academic/solitaire/).*  
