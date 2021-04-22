@@ -70,7 +70,6 @@ mapped to playing cards, similar to the Solitaire cipher [2]. Using playing
 cards could be more innocuous and easily explainable to the secret police than 
 a set of peculiar numbered tiles. 
 
-
 ```
 0 a b c d e f
 g h i j k l m

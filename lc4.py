@@ -59,6 +59,7 @@ letters6card = "#abcdefghijklmnopqrstuvwxyz_23456789"
 letters7     = "_abcdefghijklmnopqrstuvwxyz.0123456789,-+*/:?!'()"
 letters7card = "0abcdefghijklmnopqrstuvwxyz_.,-+*/:?!'()123456789"
 
+
 def missing_letters(s,t):
     return ''.join(sorted(set(c for c in s if c not in t)))
 
