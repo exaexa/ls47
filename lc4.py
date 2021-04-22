@@ -54,9 +54,10 @@ import argparse
 version = "v2.8.1 (2018-07-24)"
 
 # define alphabet
-letters6 = "#_23456789abcdefghijklmnopqrstuvwxyz"
-letters7 = "_abcdefghijklmnopqrstuvwxyz.0123456789,-+*/:?!'()"
-
+letters6     = "#_23456789abcdefghijklmnopqrstuvwxyz"
+letters6card = "#abcdefghijklmnopqrstuvwxyz_23456789"
+letters7     = "_abcdefghijklmnopqrstuvwxyz.0123456789,-+*/:?!'()"
+letters7card = "0abcdefghijklmnopqrstuvwxyz_.,-+*/:?!'()123456789"
 
 def missing_letters(s,t):
     return ''.join(sorted(set(c for c in s if c not in t)))
@@ -333,6 +334,8 @@ if __name__ == '__main__':
     mgroup1.add_argument("-6", "--lc4", help="use ElsieFour cipher (6x6 table) (default)", action="store_true")
     mgroup1.add_argument("-7", "--ls47", help="use LS47 cipher (7x7 table)", action="store_true")
 
+    parser.add_argument("-pc", "--playingcard", help="Use the \"playing card\" character tables (default: standard tables)", action="store_true")
+
     mgroup2 = parser.add_mutually_exclusive_group()
     mgroup2.add_argument("-ks", "--keystring", metavar="STRING", help="use STRING as key")
     mgroup2.add_argument("-kf", "--keyfile", metavar="FILE", help="read key from FILE")
@@ -375,10 +378,16 @@ if __name__ == '__main__':
 
     if args.ls47:
         size = 7
-        letters = letters7
+        if args.playingcard:
+            letters = letters7card
+        else:
+            letters = letters7
     else:
         size = 6
-        letters = letters6
+        if args.playingcard:
+            letters = letters6card
+        else:
+            letters = letters6
 
     tiles = list(zip(letters, [(x // size, x % size) for x in range(size * size)]))
 
