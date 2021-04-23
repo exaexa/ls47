@@ -55,9 +55,9 @@ version = "v2.8.1 (2018-07-24)"
 
 # define alphabet
 letters6     = "#_23456789abcdefghijklmnopqrstuvwxyz"
-letters6card = "#abcdefghijklmnopqrstuvwxyz_23456789"
+letters6card = "abcdefghijklmnopqrstuvwxyz_23456789#"
 letters7     = "_abcdefghijklmnopqrstuvwxyz.0123456789,-+*/:?!'()"
-letters7card = "0abcdefghijklmnopqrstuvwxyz_.,-+*/:?!'()123456789"
+letters7card = "abcdefghijklmnopqrstuvwxyz_.,-+*/:?!'()1234567890"
 
 
 def missing_letters(s,t):
