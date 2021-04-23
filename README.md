@@ -241,7 +241,8 @@ coming up with a mnemonic for the mapping of each special character to each
 Heart is left as an exercise for the reader.
 
 For an example, view [this image](card-tiles.jpg). In this example, the marker 
-is on J♣ (at the top left), and we want to encrypt the plaintext character `e`.
+is on J♣ (at the top left), and we want to encrypt the plaintext character `e`. 
+The image includes the character, index, and offsets for the relevant cards.
 
 1. From the card mapping, `e` maps to 5♦ (letters `a` through `m` map to Diamonds), which is on the second row. 
 1. The marker card, J♣, has: 
@@ -259,8 +260,6 @@ is on J♣ (at the top left), and we want to encrypt the plaintext character `e`
     - Rotate the column containing the ciphertext card, 6♠
     - Move the marker according to the offsets of the ciphertext card, to the right 3 and down 6 
 
-The image includes the character, index, and offsets for the relevant cards.
-
 For LC4, the following board could be used:
 
 ```
@@ -273,8 +272,8 @@ y z _ 2 3 4
 ```
 
 The "Hearts" suit would be ommitted from the card mapping table, and the index
-of each of the Spades would be decreased by 13 to compensate. `#` and `_`
-would map to 10♠ and A♠, respectively.
+of each of the Spades would be decreased by 13 to compensate. `_` and `#`
+would map to A♠ and 10♠, respectively.
 
 ## References
 
