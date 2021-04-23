@@ -198,12 +198,15 @@ This works because the cipher output is message-dependent: Having a wrong bit
 somewhere in the middle causes avalanche effect and erases any meaning from the
 text after several characters.
 
-### Alternative playing-card-compatible board
+### Alternative board with playing cards ♥♦♠♣
 
-The following board can be used so that characters and offsets can be easily
-mapped to playing cards, similar to the Solitaire cipher [2]. Using playing
-cards could be more innocuous and easily explainable to the secret police than
-a set of peculiar numbered tiles.
+If you find the above tiles complicated to obtain or create, you can very
+easily use playing cards to do the same, similarly as with the [Solitaire
+cipher by Schneier](https://www.schneier.com/academic/solitaire/). (Moreover,
+use of playing cards could be more innocuous and easily explainable to a
+suddenly appearing adversary,t p than a set of very peculiarly numbered tiles! :])
+
+To simplify things a bit, we will use the following layout:
 
 ```
 a b c d e f g
@@ -215,52 +218,65 @@ v w x y z _ .
 4 5 6 7 8 9 0
 ```
 
-**This board uses a 1-based index**, so `a=1`, `b=2`, and so on. With this layout, 
-the following mapping to playing cards is used:
+This maps nicely to the playing card suits:
 
-| **Character** | Card | Index | **Character** | Card | Index | **Character** | Card | Index | **Character** | Card | Index  |
-|-----------|------|-------|-----------|------|-------|-----------|------|-------|-----------|------|--------|
-| a         | A♦   | 1     | n         | A♣   | 14    | _         | A♥   | 27    | 1         | A♠   | 40     |
-| b         | 2♦   | 2     | o         | 2♣   | 15    | .         | 2♥   | 28    | 2         | 2♠   | 41     |
-| c         | 3♦   | 3     | p         | 3♣   | 16    | ,         | 3♥   | 29    | 3         | 3♠   | 42     |
-| ...       | ...  | ...   | ...       | ...  | ...   | ...       | ...  | ...   | ...       | ...  | ...    |
-| j         | 10♦  | 10    | w         | 10♣  | 23    | !         | 10♥  | 39    | 7         | 7♠   | 46     |
-| k         | J♦   | 11    | x         | J♣   | 24    | '         | J♥   | 39    | 8         | 8♠   | 47     |
-| l         | Q♦   | 12    | y         | Q♣   | 25    | (         | Q♥   | 39    | 9         | 9♠   | 48     |
-| m         | K♦   | 13    | z         | K♣   | 26    | )         | K♥   | 39    | 0         | 10♠  | 49 (0) |
+| Card value | ♦ | ♣ | ♥ | ♠ |
+|------------|---|---|---|---|
+| A          | a | n | _ | 1 |
+| 2          | b | o | . | 2 |
+| 3          | c | p | , | 3 |
+| 4          | d | q | - | 4 |
+| 5          | e | r | + | 5 |
+| 6          | f | s | * | 6 |
+| 7          | g | t | / | 7 |
+| 8          | h | u | : | 8 |
+| 9          | i | v | ? | 9 |
+| 10         | j | w | ! | 0 |
+| J          | k | x | ' |   |
+| Q          | l | y | ( |   |
+| K          | m | z | ) |   |
 
-The (x, y) offset can be calculated by first determining the index: take the
-number of the suit (0-3), multiply by 13, and add the card number (using 1 for
-the Ace, 11-13 for face cards). Then, determine the offset from the index
-using the usual modular arithmetic: `x = index % 7` and `y = index / 7`.
+The last 3 cards are not used. (actually, you are free to use the suits in
+whatever order you like and discard the last 3 of the suit you like the least.)
 
-Alphanumeric characters can be easily mapped to cards, with letters mapping to
-Diamonds or Clubs and numbers mapping to Spades (note that Spades face cards
-are ommitted). All of the special characters are mapped to the Hearts, though
-coming up with a mnemonic for the mapping of each special character to each
-Heart is left as an exercise for the reader.
+Getting the X and Y offsets from the cards is a slightly more challenging than
+with the tiles that have the offsets marked, but still doable. Calculate
+`13*suit + card value - 1`, then compute the standard quotient and remainder
+for division by 7. I settled with having the second card set laid out next to
+the "active" board, serving as a reference.
 
-For an example, view [this image](card-tiles.jpg). In this example, the marker 
-is on J♣ (at the top left), and we want to encrypt the plaintext character `e`. 
-The image includes the character, index, and offsets for the relevant cards.
+The result may look like this:
 
-1. From the card mapping, `e` maps to 5♦ (letters `a` through `m` map to Diamonds), which is on the second row. 
-1. The marker card, J♣, has: 
-    - an index of 24 (Clubs are suit 1, and the Jack is the 11th card in the suit): `i = 1 * 13 + 11 = 24`
-    - an x-offset of 3: `x = i % 7 = 24 % 7 = 3`
-    - a y-offset of 3: `y = i / 7 = 24 / 7 = 3`
-1. Using the marker offsets, the ciphertext card is three rows down and three columns to the right of 5♦, which is 6♠. 
-1. From the card mapping, 6♠ maps to `6` (Spades map directly to digits), and has:
-    - an index of 45 (Spades are suit 3, and 6 is the 6th card in the suit): `i = 3 * 13 + 6 = 45`
-    - an x-offset of 3: `x = i % 7 = 45 % 7 = 3`
-    - a y-offset of 6: `y = i / 7 = 45 / 7 = 6`
-1. We then complete the cipher as normal:
-    - Output `6` as the ciphertext
-    - Rotate the row containing the plaintext card, 5♦
-    - Rotate the column containing the ciphertext card, 6♠
-    - Move the marker according to the offsets of the ciphertext card, to the right 3 and down 6 
+![Using cards instead of tiles](card-tiles.jpg)
 
-For LC4, the following board could be used:
+In this example, the marker is on J♣ (at the top left), and we want to encrypt
+the plaintext character `e`.  The image includes the character, index, and
+offsets for the relevant cards.
+
+1. From the card mapping, `e` maps to 5♦ (letters `a` through `m` map to
+Tiles), which is on the second row.
+2. The marker card, J♣, has:
+   - an index of 24 (Clubs are suit 1, and the Jack is the 11th card in the
+     suit): `i = 1 * 13 + 11 = 24`
+   - an x-offset of 3: `x = i % 7 = 24 % 7 = 3`
+   - a y-offset of 3: `y = i / 7 = 24 / 7 = 3`
+3. Using the marker offsets, the ciphertext card is three rows down and three
+   columns to the right of 5♦, which is 6♠.
+4. From the card mapping, 6♠ maps to `6` (Spades map directly to digits), and
+   has:
+   - an index of 45 (Spades are suit 3, and 6 is the 6th card in the suit): `i
+     = 3 * 13 + 6 = 45`
+   - an x-offset of 3: `x = i % 7 = 45 % 7 = 3`
+   - a y-offset of 6: `y = i / 7 = 45 / 7 = 6`
+5. We then complete the cipher as normal:
+   - Output `6` as the ciphertext
+   - Rotate the row containing the plaintext card, 5♦
+   - Rotate the column containing the ciphertext card, 6♠
+   - Move the marker according to the offsets of the ciphertext card, to the
+     right 3 and down 6
+
+For the original LC4, you need just 3 suits, modifying the board to "align" to
+the suits e.g. as follows:
 
 ```
 a b c d e f
@@ -271,11 +287,6 @@ y z _ 2 3 4
 5 6 7 8 9 #
 ```
 
-The "Hearts" suit would be ommitted from the card mapping table, and the index
-of each of the Spades would be decreased by 13 to compensate. `_` and `#`
-would map to A♠ and 10♠, respectively.
-
 ## References
 
 [1] *Kaminsky, Alan. "ElsieFour: A Low-Tech Authenticated Encryption Algorithm For Human-to-Human Communication." IACR Cryptology ePrint Archive 2017 (2017): 339.*  
-[2] *Schneier, Bruce. ["The Solitaire Encryption Algorithm"](https://www.schneier.com/academic/solitaire/).*  
