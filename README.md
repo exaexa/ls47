@@ -240,6 +240,27 @@ are ommitted). All of the special characters are mapped to the Hearts, though
 coming up with a mnemonic for the mapping of each special character to each
 Heart is left as an exercise for the reader.
 
+For an example, view [this image](card-tiles.jpg). In this example, the marker 
+is on J♣ (at the top left), and we want to encrypt the plaintext character `e`.
+
+1. From the card mapping, `e` maps to 5♦ (letters `a` through `m` map to Diamonds), which is on the second row. 
+1. The marker card, J♣, has: 
+    - an index of 24 (Clubs are suit 1, and the Jack is the 11th card in the suit): `i = 1 * 13 + 11 = 24`
+    - an x-offset of 3: `x = i % 7 = 24 % 7 = 3`
+    - a y-offset of 3: `y = i / 7 = 24 / 7 = 3`
+1. Using the marker offsets, the ciphertext card is three rows down and three columns to the right of 5♦, which is 6♠. 
+1. From the card mapping, 6♠ maps to `6` (Spades map directly to digits), and has:
+    - an index of 45 (Spades are suit 3, and 6 is the 6th card in the suit): `i = 3 * 13 + 6 = 45`
+    - an x-offset of 3: `x = i % 7 = 45 % 7 = 3`
+    - a y-offset of 6: `y = i / 7 = 45 / 7 = 6`
+1. We then complete the cipher as normal:
+    - Output `6` as the ciphertext
+    - Rotate the row containing the plaintext card, 5♦
+    - Rotate the column containing the ciphertext card, 6♠
+    - Move the marker according to the offsets of the ciphertext card, to the right 3 and down 6 
+
+The image includes the character, index, and offsets for the relevant cards.
+
 For LC4, the following board could be used:
 
 ```
