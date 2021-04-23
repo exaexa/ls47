@@ -236,7 +236,7 @@ This maps nicely to the playing card suits:
 | Q          | l | y | ( |   |
 | K          | m | z | ) |   |
 
-The last 3 cards are not used. (actually, you are free to use the suits in
+The last 3 cards are not used. (Actually, you are free to use the suits in
 whatever order you like and discard the last 3 of the suit you like the least.)
 
 Getting the X and Y offsets from the cards is a slightly more challenging than
