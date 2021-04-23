@@ -204,7 +204,8 @@ If you find the above tiles complicated to obtain or create, you can very
 easily use playing cards to do the same, similarly as with the [Solitaire
 cipher by Schneier](https://www.schneier.com/academic/solitaire/). (Moreover,
 use of playing cards could be more innocuous and easily explainable to a
-suddenly appearing adversary,t p than a set of very peculiarly numbered tiles! :])
+suddenly appearing adversary. Playing cards is sure less suspicious than
+playing some peculiarly numbered tiles! :] )
 
 To simplify things a bit, we will use the following layout:
 
