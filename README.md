@@ -1,7 +1,7 @@
 
 # LS47 hand-computable cipher
 
-**This repository is a mirror, please point all activity/issues to https://gitea.blesmrt.net/exa/ls47**
+**This repository is a mirror, please point all activity/issues to https://git.e-x-a.org/exa/ls47**
 
 This is a slight improvement of the ElsieFour cipher as described by Alan
 Kaminsky [1]. We use 7x7 characters instead of original (barely fitting) 6x6,
